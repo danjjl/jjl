@@ -43,7 +43,7 @@ class LirePeoula(DetailView):
     #extra context
     def get_context_data(self, **kwargs):
         context = super(LirePeoula, self).get_context_data(**kwargs)
-        context['pageTitle'] = 'Peoula - ' + self.object.nom #TODO find how to write péoula
+        context['pageTitle'] = u'Péoula - ' + self.object.nom
         context['pieceJointe'] = listePeoulotFiles(self.object.id)
         try:
             context['kvoutsa'] = Kvoutsa.objects.get(date_creation=date(date.today().year + 6 - self.object.age, 9, 1)) #TODO moche récupère la kvoutsa
@@ -65,7 +65,7 @@ def ajouterModifier(request, pk=0):
         #Retrieve Peoula
         peoula = get_object_or_404(Peoula, id=pk)
         url = 'modifier/' + str(pk)
-        title = 'Modifier la peoula ' + peoula.nom
+        title = u'Modifier la péoula ' + peoula.nom
         files = listePeoulotFiles(peoula.id)
         bouton = 'Modifier'
     #New
