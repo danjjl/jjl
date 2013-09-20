@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<title> {{ pageTitle }} </title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="{{ pageTitle }}">
+		<meta name="author" content="Jonathan Dan">
+		<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+		<link href="//netdna.bootstrapcdn.com/bootswatch/3.0.0/flatly/bootstrap.min.css" rel="stylesheet">
+		<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+
+		{% block css %}
+		{% endblock %}
+
+	</head>
+
+	<body>
+		<div class="navbar navbar-default">
+			<a class="navbar-brand">JJL</a>
+			<ul class="nav navbar-nav">
+				{% load activeTag %}
+				{% url 'liste' as liste %}
+				{% url 'ajouter' as ajouter %}
+				<li class="{% active request liste %}"><a href="{% url 'liste' %}">Liste des péoulot</a></li>
+				<li class="{% active request ajouter %}"><a href="{% url 'ajouter' %}">Ajouter une péoula</a></li>
+			</ul>
+		</div>
+
+		<div class="container">
+			<div class="row">
+
+			{%if messages%}
+			{% for message in messages %}
+				<div class="alert alert-{{message.tags}}"><a href="#" class="close" data-dismiss="alert">&times;</a>{{message}}</div>
+			{% endfor %}
+			{%endif%}
+
+			{% block content %}
+			{% endblock %}
+
+			</div><!--/row-->
+		</div><!--/container-->
+
+		<hr>
+
+		<footer>
+			<p>&nbsp;<strong>&copy; <a href="http://about.me/jonathan.dan">Jonathan Dan</a></strong> <span class="pull-right"> Crée avec l'aide de <a href="http://twitter.github.com/bootstrap/">Bootstrap</a>&nbsp;</span></p>
+		</footer>
+
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	{% block js %}
+	{% endblock %}
+
+	</body>
+</html>

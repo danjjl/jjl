@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<h1>Péoula - {{ peoula.nom }}</h1>
+	<a href="{% url 'modifier' peoula.id %}"><i class="icon-pencil"></i> Modifier la péoula</a><br>
+	<!--TODO améliorer print-->
+	<a href="javascript:if(window.print)window.print()"><i class="icon-print"></i> Imprimer la péoula </a>
+
+	<div class="container pull-right col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">{{ peoula.nom }} <small> - {{ peoula.date_creation }}</small></div>
+			<div class="panel-body">
+				<ul>
+					<li><strong>Âge :</strong> {{ peoula.age }}-{{ peoula.age|add:"1" }} ans ({{ kvoutsa }})</li>
+					<li><strong>Durée :</strong> {{ peoula.duree }}</li>
+					<li><strong>Thème :</strong> {{ peoula.theme }}</li>
+					<li><strong>Type :</strong> {{ peoula.genre }}</li>
+					<li><strong>Objectifs éducatifs :</strong> {{ peoula.but }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<h3>Introduction :</h3>
+	<div>{{ peoula.introduction|safe }}</div>
+
+	<h3>Déroulement :</h3>
+	<div>{{ peoula.deroulement|safe }}</div>
+
+	<h3>Conclusion :</h3>
+	<div>{{ peoula.conclusion|safe }}</div>
+
+	<h3>Matériel et kishout :</h3>
+	<div>{{ peoula.materiel|safe }}</div>
+
+	<hr>
+
+	<h3>Commentaires :</h3>
+	<div>{{ peoula.commentaires|safe }}</div>
+
+	<h3>Variantes :</h3>
+	<div>{{ peoula.variantes|safe }}</div>
+
+	<h3>Pièces Jointes :</h3>
+	<ul>
+	{% for piece in pieceJointe %}
+		<li><a href="{{ MEDIA_URL }}Peoulot/{{ piece }}">{{ piece }}</a></li>
+	{% endfor %}
+	</ul>
+{% endblock %}

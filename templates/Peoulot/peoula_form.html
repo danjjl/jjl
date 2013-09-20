@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+
+	<h1>{{ pageTitle }}</h1>
+
+{% load crispy_forms_tags %}
+<form action="/peoulot/{{ url }}" enctype="multipart/form-data" method="post">{% csrf_token %}
+	{% crispy peoulaForm %}
+
+	{% crispy fileForm %}
+
+	<ul class="list-inline">
+		{% for piece in files %}
+		<li><button name="delete" value="{{ piece }}" type="submit" class="btn btn-link"><i class='icon-trash'></i> {{ piece }}</button></li>
+		{% endfor %}
+	</ul>
+
+	<button class="btn btn-default" type="submit">Ajouter</button>
+</form>
+
+</div>
+{% endblock %}
+
+{% block js %}
+	{% load wysiwyg %}
+	{% wysiwyg_setup %}
+	{% wysiwyg_editor "id_peoula-introduction" %}
+	{% wysiwyg_editor "id_peoula-deroulement" %}
+	{% wysiwyg_editor "id_peoula-conclusion" %}
+	{% wysiwyg_editor "id_peoula-materiel" %}
+	{% wysiwyg_editor "id_peoula-commentaires" %}
+	{% wysiwyg_editor "id_peoula-variantes" %}
+	<script src="/static/multifile.js"></script>
+{% endblock %}
