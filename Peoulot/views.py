@@ -67,11 +67,13 @@ def ajouterModifier(request, pk=0):
         url = 'modifier/' + str(pk)
         title = 'Modifier la peoula ' + peoula.nom
         files = listePeoulotFiles(peoula.id)
+        bouton = 'Modifier'
     #New
     else:
         url = 'ajouter/'
         title = 'Ajouter une Péoula'
         files = ''
+        bouton = 'Ajouter'
 
     peoulaFormSet = PeoulaForm
     fileFormSet = UploadFileForm
@@ -119,6 +121,7 @@ def ajouterModifier(request, pk=0):
         'fileForm': file_FormSet,
         'url' : url,
         'files' : files,
+        'bouton' : bouton,
     }, context_instance=RequestContext(request))
 
 #__FUNCTIONS__
