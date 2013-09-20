@@ -6,6 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from django.conf import settings
+from django.contrib import messages
 
 from django.forms.formsets import formset_factory
 from django.shortcuts import render_to_response, redirect, get_object_or_404
@@ -86,12 +87,16 @@ def ajouterModifier(request, pk=0):
             if 'delete' in request.POST:
                 deleteFile(request.POST['delete'])
                 files = listePeoulotFiles(peoula.id)
+                messages.info(request, u'La pièce jointe ' + request.POST['delete'] + u' a été suprimée de manière irrévocable.')
             else:
                 if peoula_FormSet.is_valid() and file_FormSet.is_valid():
                     #Save Peoula
                     if pk == 0:
                         peoula_FormSet.instance.date_creation = date.today()
                         peoula_FormSet.instance.telechargement = 0
+                        messages.success(request, u'La péoula ' + peoula_FormSet.instance.nom + u' a été ajoutée à la, tjs grandissante, liste des péoulot.')
+                    else:
+                        messages.info(request, u'La péoula ' + peoula_FormSet.instance.nom + u' a été modifiée.')
                     peoula = peoula_FormSet.save()
                     #Save file
                     for files in request.FILES.getlist('file-file'):
