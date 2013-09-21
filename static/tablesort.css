@@ -6,38 +6,14 @@ th.table-sort {
   transition         : all 0.3s;
   cursor             : pointer;
 }
-
 th.table-sort:hover {
   background: rgb(236, 240, 241);
-}
-
-.table-sort-up,
-.table-sort-down {
-  border   : 5px solid transparent;
-}
-
-.table-sort-up {
-  border-bottom-color : rgb(44, 62, 80);
-  margin-bottom: 5px;
-}
-
-.table-sort-down {
-  border-top-color : rgb(44, 62, 80);
-}
-
-.table-sort-order-asc .table-sort-up {
-  border-bottom-color: rgba(255,255,255,1);
-}
-
-.table-sort-order-des .table-sort-down {
-  border-top-color: rgba(255,255,255,1);
 }
 
 /* Table Sort Search */
 .table-sort-search-container {
   background : rgb(236, 240, 241);
 }
-
 .table-sort-search-input {
   -webkit-appearance : none;
   width              : 100%;
@@ -45,11 +21,9 @@ th.table-sort:hover {
   border             : none;
   border-radius      : 6px;
 }
-
 .table-sort-search-input:focus,.table-sort-search-input:hover {
   outline    : none;
 }
-
 .table-sort-highlight {
   color: rgb(255, 255, 255);
   background : rgb(24, 188, 156);

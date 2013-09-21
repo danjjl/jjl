@@ -23,29 +23,17 @@
   Plugin.prototype = {
 
     init: function() {
-      var table              = $(this.element)
-      var tableSortContainer = $('');
-      this.setup(table,tableSortContainer);
-      this.search(table,tableSortContainer);
+      var table = $(this.element)
+      this.setup(table);
+      this.search(table);
     },
 
-    setup: function(table,tableSortContainer) {
+    setup: function(table) {
       var tableParent        = table.parent();
 
-      // Add the sorting buttons to the TH elements
+      // Add the sorting buttons to the TH elements //TODO find how to add white spaces
       function format(th) {
-        var sortField   = $('<div class="table-sort-field"></div>');
-        var sortControl = $('<div class="table-sort-control pull-right"></div>');
-        var sortUp      = $('<div class="table-sort-up"></div>');
-        var sortDown    = $('<div class="table-sort-down"></div>');
-        var thContents  = $(th).clone().html();
-
-        sortField.html(thContents);
-        sortUp.appendTo(sortControl);
-        sortDown.appendTo(sortControl);
-        sortControl.appendTo(sortField);
-        th.contents().replaceWith(sortField).end();
-
+         $('<i class="icon-sort"></i>').prependTo(th);
       };
       // Generate a new clean row based on an array
       function newRow(arr) {
@@ -68,11 +56,21 @@
       };
       // Remove the sort order class from the non active table headings
       function removeSortOrderClass(table) {
-        table.find('th').each(function () {
-          $(this).removeClass('table-sort-order-asc');
-          $(this).removeClass('table-sort-order-des');
+        table.find('i').each(function () {
+          $(this).removeClass('icon-sort-by-order');
+          $(this).removeClass('icon-sort-by-order-alt');
+          $(this).addClass('icon-sort');
         });
       };
+      function clean(a) {
+        if(a.indexOf('-') > 0){
+          a = a.substring(0, a.indexOf('-'));
+        }
+        if(a.indexOf('_') > 0){
+          a = a.substring(0, a.indexOf('_'));
+        }
+        return a;
+      }
       function bindTh(th) {
         th.on('click',function () {
           var sortArr     = [];
@@ -80,15 +78,16 @@
           var obj         = {};
           var index       = $(this).index();
           var tr          = table.find('tbody tr');
+          var sortIcon    = $(this).find('i');
           var sortOrder;
 
           // Determine Sort Order
-          if ($(this).hasClass('table-sort-order-desc')) {
-            sortOrder = 'asc';
-          } else if ($(this).hasClass('table-sort-order-asc')) {
-            sortOrder = 'des';
+          if (sortIcon.hasClass('icon-sort-by-order-alt')) {
+            sortOrder = '';
+          } else if (sortIcon.hasClass('icon-sort-by-order')) {
+            sortOrder = '-alt';
           } else {
-            sortOrder = 'asc';
+            sortOrder = '';
           }
           tr.each(function () {
             var text     = $(this).find('td:eq('+index+')').text()+'_'+$(this).index();
@@ -98,16 +97,14 @@
               rowArr[text].push($(this).html());
             });
           });
-          // Sort Array and Apply Classes
-          sortArr = sortArr.sort();
-          if (sortOrder === 'asc') {
-            sortArr = sortArr.reverse();
-            $(this).removeClass('table-sort-order-des');
-          } else {
-            $(this).removeClass('table-sort-order-asc');
+          // Sort Array Numericaly and Apply Classes
+          sortArr = sortArr.sort(function(a,b){return (clean(a) - clean(b));});
+          if(sortOrder === '-alt') {
+            sortArr.reverse();
           }
           removeSortOrderClass(table);
-          $(this).addClass('table-sort-order-'+sortOrder);
+          sortIcon.removeClass('icon-sort');
+          sortIcon.addClass('icon-sort-by-order'+sortOrder);
 
           newBody({
             table: table,
@@ -135,15 +132,17 @@
 
     },
 
-    search: function (table, tableSortContainer) {
+    search: function (table) {
       // Add highlighting around matched text
       function filter(options) {
         var tr    = options.table.find('tbody tr');
-        var match = new RegExp(options.searchTerm,'ig');
+        var count = 0;
+        var match = new RegExp(options.searchTerm,'i');
         tr.each(function () {
           var el = $(this);
           el.find('.table-sort-highlight').contents().unwrap().end().remove();
           if (match.test(el.text())) {
+            count = count + 1;
             el.find(':not(:has(*))').each(function () {
               var target = $(this);
               replaced   = target.html().replace(match,function (m,e) {
@@ -160,7 +159,6 @@
       table = $(table);
       if (table.hasClass('table-sort-search')) {
         var searchInput   = table.find('.table-sort-search-input');
-
         searchInput.on('keyup',function () {
           filter({table: table,searchTerm: $(this).val()});
         });
