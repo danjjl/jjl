@@ -35,20 +35,15 @@ th.table-sort:hover {
 
 /* Table Sort Search */
 .table-sort-search-container {
-  padding    : 5px 5px;
   background : rgb(236, 240, 241);
 }
 
 .table-sort-search-input {
   -webkit-appearance : none;
   width              : 100%;
-  height             : 23px;
-  padding            : 0 10px;
+  padding            : 5px 10px;
   border             : none;
   border-radius      : 6px;
-  font-size          : 13px;
-  line-height        : 23px;
-  background         : #fff;
 }
 
 .table-sort-search-input:focus,.table-sort-search-input:hover {

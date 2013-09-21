@@ -22,6 +22,11 @@
 				<th class="table-sort">Vues</th>
 				<th>Date</th>
 			</tr>
+			{% if forloop.last %}
+			<tr>
+				<th class="table-sort-search-container" colspan="6"><input class="table-sort-search-input" type="text" placeholder="Rechercher..."></th>
+			</tr>
+			{% endif %}
 		</thead>
 		<tbody>
 
