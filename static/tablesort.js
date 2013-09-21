@@ -136,13 +136,11 @@
       // Add highlighting around matched text
       function filter(options) {
         var tr    = options.table.find('tbody tr');
-        var count = 0;
         var match = new RegExp(options.searchTerm,'i');
         tr.each(function () {
           var el = $(this);
           el.find('.table-sort-highlight').contents().unwrap().end().remove();
           if (match.test(el.text())) {
-            count = count + 1;
             el.find(':not(:has(*))').each(function () {
               var target = $(this);
               replaced   = target.html().replace(match,function (m,e) {
