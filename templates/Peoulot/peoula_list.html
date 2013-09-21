@@ -7,18 +7,18 @@
 {% block content %}
 <div class="container">
 
-	<h1>Liste des péoulot</h1>
+
 
 {% for header, peoulas in peoulot %}
-	<h2>{{ header }}</h2>
+	<h1>{{ header }}</h1>
 
 	<table class="table table-striped table-sort {% if forloop.last %}table-sort-search{% endif %}">
 		<thead>
 			<tr>
-				<th class="table-sort">Nom</th>
-				<th class="table-sort" >Âge</th>
-				<th class="table-sort">Thème</th>
-				<th class="table-sort">Type</th>
+				<th>Nom</th>
+				<th class="table-sort">Âge</th>
+				<th>Thème</th>
+				<th>Type</th>
 				<th class="table-sort">Vues</th>
 				<th>Date</th>
 			</tr>
