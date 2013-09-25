@@ -10,10 +10,10 @@ def login_view(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            messages.success(request, u'Tu as été connectée en tant que ' + username + u'. Bonne péoulot.')
+            messages.success(request, u'Tu as été connecté en tant que ' + username + u'. Bonnes péoulot.')
             return redirect('liste')
         else:
-            messages.warning(request, u'Ce compte a été désactivé. Faudra se connecter avec un autre compte')
+            messages.warning(request, u'Ce compte a été désactivé. Il faudra se connecter avec un autre compte')
             return redirect('login')
     else:
         messages.warning(request, u'Oh :o Tu t\'es trompé dans le mot de passe ou dans le nom d\'utilisateur.')
