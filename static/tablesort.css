@@ -14,16 +14,6 @@ th.table-sort:hover {
 .table-sort-search-container {
   background : rgb(236, 240, 241);
 }
-.table-sort-search-input {
-  -webkit-appearance : none;
-  width              : 100%;
-  padding            : 5px 10px;
-  border             : none;
-  border-radius      : 6px;
-}
-.table-sort-search-input:focus,.table-sort-search-input:hover {
-  outline    : none;
-}
 .table-sort-highlight {
   color: rgb(255, 255, 255);
   background : rgb(24, 188, 156);

@@ -133,6 +133,10 @@
     },
 
     search: function (table) {
+      //Add search box
+      if (table.hasClass('table-sort-search')) {
+        table.find('thead').append("<tr><th class='table-sort-search-container' colspan='6'><form><input class='form-control table-sort-search-input' type='search' placeholder='Rechercher...'></form></th></tr>");
+      }
       // Add highlighting around matched text
       function filter(options) {
         var tr    = options.table.find('tbody tr');
