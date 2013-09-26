@@ -24,12 +24,23 @@ class ListPeoulot(ListView):
     model = Peoula #List péoulot
     context_object_name = 'peoulot'
 
+    #determine week or all
+    def get_queryset(self):
+        self.toutes = 'toutes' in self.kwargs
+        return Peoula.objects.all()
+
     #extra context
     def get_context_data(self, **kwargs):
         context = super(ListPeoulot, self).get_context_data(**kwargs)
-        context['pageTitle'] = 'Péoulot'
-        weekPeoulot = context['peoulot'].filter(date_creation__gte=(date.today() - timedelta(10)))
-        context['peoulot'] = (('Péoulot de la semaine', weekPeoulot), ('Toutes les péoulot', context['peoulot']))
+        #Toutes
+        if self.toutes:
+            context['pageTitle'] = 'Toutes les péoulot'
+            context['trier'] = True
+        #Péoulot de la semaine
+        else:
+            context['pageTitle'] = 'Péoulot de la semaine'
+            context['peoulot'] = context['peoulot'].filter(date_creation__gte=(date.today() - timedelta(10)))
+            context['trier'] = False
         return context
 
 

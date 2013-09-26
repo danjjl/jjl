@@ -21,8 +21,10 @@
 			<ul class="nav navbar-nav">
 				{% load activeTag %}
 				{% url 'liste' as liste %}
+				{% url 'toutes' as toutes %}
 				{% url 'ajouter' as ajouter %}
-				<li class="{% active request liste %}"><a href="{% url 'liste' %}">Liste des péoulot</a></li>
+				<li class="{% active request liste %}"><a href="{% url 'liste' %}">Péoulot de la semaine</a></li>
+				<li class="{% active request toutes %}"><a href="{% url 'toutes' %}">Toutes les péoulot</a></li>
 				<li class="{% active request ajouter %}"><a href="{% url 'ajouter' %}">Ajouter une péoula</a></li>
 			</ul>
 			<a class="pull-right" href="{% url 'logout' %}"><button type="button" class="btn btn-default navbar-btn">Se déconnecter</button>&nbsp;</a>
