@@ -27,7 +27,7 @@
 				<li class="{% active request toutes %}"><a href="{% url 'toutes' %}">Toutes les péoulot</a></li>
 				<li class="{% active request ajouter %}"><a href="{% url 'ajouter' %}">Ajouter une péoula</a></li>
 			</ul>
-			<a class="pull-right" href="{% url 'logout' %}"><button type="button" class="btn btn-default navbar-btn">Se déconnecter</button>&nbsp;</a>
+			<span class="pull-right"><a class="navbar-btn btn btn-default" href="{% url 'logout' %}">Se déconnecter</a>&nbsp;</span>
 		</div>
 
 		<div class="container">
