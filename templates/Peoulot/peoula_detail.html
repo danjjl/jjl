@@ -22,27 +22,27 @@
 		</div>
 	</div>
 
-	<h3>Introduction :</h3>
+	<h2>Introduction :</h2>
 	<div>{{ peoula.introduction|safe }}</div>
 
-	<h3>Déroulement :</h3>
+	<h2>Déroulement :</h2>
 	<div>{{ peoula.deroulement|safe }}</div>
 
-	<h3>Conclusion :</h3>
+	<h2>Conclusion :</h2>
 	<div>{{ peoula.conclusion|safe }}</div>
 
-	<h3>Matériel et kishout :</h3>
+	<h2>Matériel et kishout :</h2>
 	<div>{{ peoula.materiel|safe }}</div>
 
 	<hr>
 
-	<h3>Commentaires :</h3>
+	<h2>Commentaires :</h2>
 	<div>{{ peoula.commentaires|safe }}</div>
 
-	<h3>Variantes :</h3>
+	<h2>Variantes :</h2>
 	<div>{{ peoula.variantes|safe }}</div>
 
-	<h3>Pièces Jointes :</h3>
+	<h2>Pièces Jointes :</h2>
 	<ul>
 	{% for piece in pieceJointe %}
 		<li><a href="{{ MEDIA_URL }}Peoulot/{{ piece }}">{{ piece }}</a></li>

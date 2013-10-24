@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block css %}
-<link href="/static/tablesort.css" rel="stylesheet">
+<link href="/static/tablesort.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -39,7 +39,7 @@
 {% endblock %}
 
 {% block js %}
-<script src="/static/tablesort.js"></script>
+<script src="/static/tablesort.min.js"></script>
 <script>
 	$(function () { $('.table-sort').tablesort(); });
 </script>
