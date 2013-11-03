@@ -33,7 +33,7 @@
 
       // Add the sorting buttons to the TH elements //TODO find how to add white spaces
       function format(th) {
-         $('<i class="icon-sort"></i>').prependTo(th);
+         $('<i class="fa fa-sort fa-fw"></i>').prependTo(th);
       };
       // Generate a new clean row based on an array
       function newRow(arr) {
@@ -57,9 +57,9 @@
       // Remove the sort order class from the non active table headings
       function removeSortOrderClass(table) {
         table.find('i').each(function () {
-          $(this).removeClass('icon-sort-by-order');
-          $(this).removeClass('icon-sort-by-order-alt');
-          $(this).addClass('icon-sort');
+          $(this).removeClass('fa-sort-numeric-asc');
+          $(this).removeClass('fa-sort-numeric-desc');
+          $(this).addClass('fa-sort');
         });
       };
       function clean(a) {
@@ -82,12 +82,12 @@
           var sortOrder;
 
           // Determine Sort Order
-          if (sortIcon.hasClass('icon-sort-by-order-alt')) {
-            sortOrder = '';
-          } else if (sortIcon.hasClass('icon-sort-by-order')) {
-            sortOrder = '-alt';
+          if (sortIcon.hasClass('fa-sort-numeric-desc')) {
+            sortOrder = 'fa-sort-numeric-asc';
+          } else if (sortIcon.hasClass('fa-sort-numeric-asc')) {
+            sortOrder = 'fa-sort-numeric-desc';
           } else {
-            sortOrder = '';
+            sortOrder = 'fa-sort-numeric-asc';
           }
           tr.each(function () {
             var text     = $(this).find('td:eq('+index+')').text()+'_'+$(this).index();
@@ -99,12 +99,14 @@
           });
           // Sort Array Numericaly and Apply Classes
           sortArr = sortArr.sort(function(a,b){return (clean(a) - clean(b));});
-          if(sortOrder === '-alt') {
+          if(sortOrder === 'fa-sort-numeric-desc') {
             sortArr.reverse();
           }
           removeSortOrderClass(table);
-          sortIcon.removeClass('icon-sort');
-          sortIcon.addClass('icon-sort-by-order'+sortOrder);
+          sortIcon.removeClass('fa-sort');
+          sortIcon.removeClass('fa-sort-numeric-desc');
+          sortIcon.removeClass('fa-sort-numeric-asc');
+          sortIcon.addClass(sortOrder);
 
           newBody({
             table: table,
