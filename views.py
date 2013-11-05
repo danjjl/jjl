@@ -2,6 +2,15 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.views.generic import TemplateView
+
+class LoginTemplate(TemplateView):
+    template_name='login.html'
+    #extra context
+    def get_context_data(self, **kwargs):
+        context = super(TemplateView, self).get_context_data(**kwargs)
+        context['pageTitle'] = 'Log In'
+        return context
 
 def login_view(request):
     username = request.POST['nom']

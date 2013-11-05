@@ -3,17 +3,15 @@ from django.conf.urls import *
 from django.conf import settings
 from django.conf.urls.static import static
 
-from django.views.generic import TemplateView
-
 from JJL.Peoulot.views import ListPeoulot
-from JJL.views import login_view, logout_view
+from JJL.views import login_view, logout_view, LoginTemplate
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name='login.html'), name='login'),
+    url(r'^$', LoginTemplate.as_view(), name='login'),
     url(r'^login/$', login_view, name='validate'),
     url(r'^logout/$', logout_view, name='logout'),
     (r'^peoulot/', include('JJL.Peoulot.urls')),
