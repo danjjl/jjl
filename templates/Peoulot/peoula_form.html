@@ -24,14 +24,19 @@
 {% endblock %}
 
 {% block js %}
+
 	{% load wysiwyg %}
 	{% wysiwyg_setup %}
-	{% wysiwyg_editor "id_peoula-introduction" %}
-	{% wysiwyg_editor "id_peoula-deroulement" %}
-	{% wysiwyg_editor "id_peoula-conclusion" %}
-	{% wysiwyg_editor "id_peoula-materiel" %}
-	{% wysiwyg_editor "id_peoula-commentaires" %}
-	{% wysiwyg_editor "id_peoula-variantes" %}
+	{% comment %}TODO find how to set config for all editors{% endcomment %}
+	{% with "{lang: 'fr', plugins: ['fullscreen'], buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'underline', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 'image', 'table', 'link', '|', 'horizontalrule'], formattingTags: ['p', 'blockquote', 'h3', 'h4', 'h5'], сlipboardUpload: false, dragUpload: false}" as config %}
+		{% wysiwyg_editor "id_peoula-introduction" "" config %}
+		{% wysiwyg_editor "id_peoula-deroulement" "" config %}
+		{% wysiwyg_editor "id_peoula-conclusion" "" config %}
+		{% wysiwyg_editor "id_peoula-materiel" "" config %}
+		{% wysiwyg_editor "id_peoula-commentaires" "" config %}
+		{% wysiwyg_editor "id_peoula-variantes" "" config %}
+	{% endwith %}
 	<script src="/static/multifile/multifile.min.js"></script>
+	<script src="/static/redactor/fr.min.js"></script>
 	<script src="/static/redactor/fullscreen.min.js"></script>
 {% endblock %}
