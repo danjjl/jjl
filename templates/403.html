@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<h1>Erreur 403</h1>
+	<p>Tu n'as pas les privilèges suffisants pour effectuer cette action. Tu peux te reconnecter en suivant <a href={% url 'logout' %}>ce lien</a>.</p>
+{% endblock %}
