@@ -13,6 +13,7 @@ from django.shortcuts import render_to_response, redirect, get_object_or_404
 
 from datetime import *
 import glob
+import os
 from os import remove, path
 
 from JJL.Peoulot.models import Peoula
