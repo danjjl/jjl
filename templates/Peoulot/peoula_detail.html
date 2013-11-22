@@ -3,6 +3,8 @@
 {% block content %}
 
 	<h1>Péoula - {{ peoula.nom }}</h1>
+
+	{% if perms.Peoulot.delete_peoula %}<a href="{% url 'modifier' peoula.id %}" class="supprimer"><i class="fa fa-trash-o fa-fw"></i> Supprimer la péoula</a><br>{% endif %}
 	{% if perms.Peoulot.change_peoula %}<a href="{% url 'modifier' peoula.id %}"><i class="fa fa-pencil fa-fw"></i> Modifier la péoula</a><br>{% endif %}
 	<!--TODO améliorer print-->
 	<a href="javascript:if(window.print)window.print()"><i class="fa fa-print fa-fw"></i> Imprimer la péoula </a>
@@ -48,4 +50,18 @@
 		<li><a href="{{ MEDIA_URL }}Peoulot/{{ piece }}">{{ piece }}</a></li>
 	{% endfor %}
 	</ul>
+{% endblock %}
+
+{% block js %}
+	<script src="/static/bootbox/bootbox.min.js"></script>
+	<script>
+		$(function(){$("a.supprimer").click(function(e){
+			e.preventDefault();
+			bootbox.confirm("Es-tu sûr de vouloir supprimer la péoula {{ peoula.nom }}?", function(confirmed){
+				if(confirmed){
+					window.open($("a.supprimer").attr("href"),"_self");
+				}
+			});
+		});});
+	</script>
 {% endblock %}

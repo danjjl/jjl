@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import Http404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, DeleteView
 from django.views.generic.edit import CreateView, UpdateView
 from django.core.exceptions import ObjectDoesNotExist
 from django.template import RequestContext
@@ -134,6 +134,13 @@ def ajouterModifier(request, pk=0):
         'files' : files,
         'bouton' : bouton,
     }, context_instance=RequestContext(request))
+
+#__SUPPRIMER PÉOULA__
+def supprimerPeoula(request, pk):
+    peoula = get_object_or_404(Peoula, id=pk)
+    messages.info(request, u'La péoula ' + peoula.nom + u' a été suprimée de manière irrévocable.')
+    peoula.delete()
+    return redirect('liste')
 
 #__FUNCTIONS__
 #Slugify filename

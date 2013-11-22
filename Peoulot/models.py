@@ -27,7 +27,15 @@ class Peoula(models.Model):
     variantes = models.TextField(blank=True, )
     date_creation = models.DateField()
     telechargement = models.IntegerField()
-    #Pas oublier pièces jointes!
+
+    #Delete object instance : delete all attachements
+    def delete(self, *args, **kwargs):
+        #avoid circular import
+        from JJL.Peoulot.views import listePeoulotFiles, deleteFile
+        files = listePeoulotFiles(self.pk)
+        for filename in files:
+            deleteFile(filename)
+        super(Peoula, self).delete(*args, **kwargs)
 
     def __unicode__(self):
         return self.nom
