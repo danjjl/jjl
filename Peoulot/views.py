@@ -1,23 +1,18 @@
 # -*- coding: utf-8 -*-
 from django.http import Http404
-from django.views.generic import ListView, DetailView, DeleteView
-from django.views.generic.edit import CreateView, UpdateView
-from django.core.exceptions import ObjectDoesNotExist
+from django.views.generic import ListView, DetailView
 from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from django.conf import settings
 from django.contrib import messages
-
-from django.forms.formsets import formset_factory
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 
-from datetime import *
-import glob
-import os
+from datetime import date, timedelta
+from glob import glob
 from os import remove, path
 
 from JJL.Peoulot.models import Peoula
-from JJL.Kvoutsot.models import Kvoutsa
+from JJL.Kvoutsot.views import nomKvoutsa
 from JJL.Peoulot.forms import PeoulaForm, UploadFileForm
 
 #__LIST DES PÉOULOT__
@@ -25,7 +20,7 @@ class ListPeoulot(ListView):
     model = Peoula #List péoulot
     context_object_name = 'peoulot'
 
-    #determine week or all
+    #determine péoulot de la semaine ou toutes
     def get_queryset(self):
         self.toutes = 'toutes' in self.kwargs
         return Peoula.objects.all()
@@ -36,18 +31,18 @@ class ListPeoulot(ListView):
         #Toutes
         if self.toutes:
             context['pageTitle'] = 'Toutes les péoulot'
-            context['trier'] = True
+            context['trier'] = True #Barre de recherche dans template
         #Péoulot de la semaine
         else:
             context['pageTitle'] = 'Péoulot de la semaine'
-            context['peoulot'] = context['peoulot'].filter(date_creation__gte=(date.today() - timedelta(10)))
+            context['peoulot'] = context['peoulot'].filter(date_creation__gte=(date.today() - timedelta(10)))#max 10 jours
             context['trier'] = False
         return context
 
 
 #__DÉTAIL PÉOULA__
 class LirePeoula(DetailView):
-    model = Peoula #List péoulot
+    model = Peoula
     context_object_name = 'peoula'
     template_name = 'Peoulot/peoula_detail.html'
 
@@ -56,18 +51,16 @@ class LirePeoula(DetailView):
         context = super(LirePeoula, self).get_context_data(**kwargs)
         context['pageTitle'] = u'Péoula - ' + self.object.nom
         context['pieceJointe'] = listePeoulotFiles(self.object.id)
-        try:
-            context['kvoutsa'] = Kvoutsa.objects.get(date_creation=date(date.today().year + 6 - self.object.age, 9, 1)) #TODO moche récupère la kvoutsa
-        except ObjectDoesNotExist:
-           print 'Did not find a kvoutsa for that age'
+        context['kvoutsa'] = nomKvoutsa(self.object.age)
         return context
 
-    #On view add download
+    #Incrémente nb vues
     def get_object(self):
         object = super(LirePeoula, self).get_object()
         object.telechargement += 1
         object.save()
         return object
+
 
 #__AJOUTER & MODIFIER__
 def ajouterModifier(request, pk=0):
@@ -145,7 +138,7 @@ def supprimerPeoula(request, pk):
 #__FUNCTIONS__
 #Slugify filename
 def fileify(filename):
-    filename = os.path.splitext(filename)
+    filename = path.splitext(filename)
     return slugify(filename[0]) + filename[1]
 
 def handle_uploaded_file(upFile, pk):
@@ -154,13 +147,13 @@ def handle_uploaded_file(upFile, pk):
             destination.write(chunk)
 
 def listePeoulotFiles(pk):
-    files = glob.glob(settings.MEDIA_ROOT[0] + '/Peoulot/'+ str(pk) +'-*')
+    files = glob(settings.MEDIA_ROOT[0] + '/Peoulot/'+ str(pk) +'-*')
     for i in range(0, len(files)):
         files[i] = files[i][len(settings.MEDIA_ROOT[0] + '/Peoulot/'):]
     return files
 
 def deleteFile(filename):
-    if os.path.isfile(settings.MEDIA_ROOT[0] + '/Peoulot/' + filename):
-        os.remove(settings.MEDIA_ROOT[0] + '/Peoulot/' + filename)
+    if path.isfile(settings.MEDIA_ROOT[0] + '/Peoulot/' + filename):
+        remove(settings.MEDIA_ROOT[0] + '/Peoulot/' + filename)
     else:
         raise Http404
