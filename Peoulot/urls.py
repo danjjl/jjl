@@ -9,5 +9,5 @@ urlpatterns = patterns('JJL.Peoulot.views',
     url(r'^lire/(?P<pk>\d+)$', login_required(LirePeoula.as_view()), name='lire'),
     url(r'^ajouter/$', permission_required('Peoulot.add_peoula', raise_exception=True)(ajouterModifier), name='ajouter'),
     url(r'^modifier/(?P<pk>\d+)$', permission_required('Peoulot.change_peoula', raise_exception=True)(ajouterModifier), name='modifier'),
-    url(r'^supprimer/(?P<pk>\d+)$', permission_required('Peoulot.delete_peoula', raise_exception=True)(supprimerPeoula), name='supprimer'),
+    url(r'^supprimer/$', permission_required('Peoulot.delete_peoula', raise_exception=True)(supprimerPeoula), name='supprimer'),
 )

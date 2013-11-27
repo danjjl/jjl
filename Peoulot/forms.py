@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.forms import Form, ModelForm, FileField
+from django.forms import Form, ModelForm, FileField, IntegerField, HiddenInput
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div, Field
 
@@ -48,3 +48,6 @@ class UploadFileForm(Form):
             Field('file', css_class="multi")
         )
         super(UploadFileForm, self).__init__(*args, **kwargs)
+
+class DeletePeoulaForm(Form):
+    pk = IntegerField(required=True, widget=HiddenInput())

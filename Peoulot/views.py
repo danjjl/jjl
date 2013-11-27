@@ -13,7 +13,7 @@ from os import remove, path
 
 from JJL.Peoulot.models import Peoula
 from JJL.Kvoutsot.views import nomKvoutsa
-from JJL.Peoulot.forms import PeoulaForm, UploadFileForm
+from JJL.Peoulot.forms import PeoulaForm, UploadFileForm, DeletePeoulaForm
 
 #__LIST DES PÉOULOT__
 class ListPeoulot(ListView):
@@ -129,10 +129,13 @@ def ajouterModifier(request, pk=0):
     }, context_instance=RequestContext(request))
 
 #__SUPPRIMER PÉOULA__
-def supprimerPeoula(request, pk):
-    peoula = get_object_or_404(Peoula, id=pk)
-    messages.info(request, u'La péoula ' + peoula.nom + u' a été suprimée de manière irrévocable.')
-    peoula.delete()
+def supprimerPeoula(request):
+    if request.method == 'POST':
+        form = DeletePeoulaForm(request.POST)
+        if form.is_valid():
+            peoula = get_object_or_404(Peoula, id=form.cleaned_data['pk'])
+            messages.info(request, u'La péoula ' + peoula.nom + u' a été suprimée de manière irrévocable.')
+            peoula.delete()
     return redirect('liste')
 
 #__FUNCTIONS__
