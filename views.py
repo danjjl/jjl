@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import redirect, render_to_response
 from django.template import RequestContext
-from django.views.generic import TemplateView
 
 def home(request):
     if request.user.is_authenticated():
