@@ -10,14 +10,17 @@
 {% block base-navbar %}
 	<div class="navbar navbar-default">
 		<div class="navbar-header">
+		{% if user.is_authenticated %}
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 				<span class="sr-only">Toggle navigation</span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
+		{% endif %}
 			<a class="navbar-brand" href="#">JJL</a>
 		</div>
+		{% if user.is_authenticated %}
 		<div class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
 				{% load activeTag %}
@@ -30,6 +33,7 @@
 			</ul>
 			<span class="pull-right"><a class="navbar-btn btn btn-default" href="{% url 'logout' %}">Se déconnecter</a></span>
 		</div>
+		{% endif %}
 	</div>
 {% endblock %}
 
