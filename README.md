@@ -14,7 +14,7 @@ Ce dépôt ne comprends ni le fichier `settings.py` ni une base de donnée, tous
 ### js & css
 - **[jquery](https://jquery.org)** (1.10.2)
 - **[HTML5 Shiv](https://code.google.com/p/html5shiv/)** (3.7.0)
-- **[respond](https://github.com/scottjehl/Respond)** (1.3.0)
+- **[respond](https://github.com/scottjehl/Respond)** (1.4.2)
 - **[bootstrap](http://getbootstrap.com)** (js) (3.0.3)
 - **[bootswatch - flatly](http://bootswatch.com/flatly)** (3.0.3)
 - **[font-awesome](http://fontawesome.io)** (4.0.3)
