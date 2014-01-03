@@ -20,4 +20,4 @@ Ce dépôt ne comprends ni le fichier `settings.py` ni une base de donnée, tous
 - **[font-awesome](http://fontawesome.io)** (4.0.3)
 - **[bootbox](http://bootboxjs.com)** (4.1.0)
 - **[multifile](http://www.fyneworks.com/jquery/multiple-file-upload)** (1.48)
-- **[redactor](http://imperavi.com/redactor)** (1.8.0)
+- **[redactor](http://imperavi.com/redactor)** (9.1.9)
