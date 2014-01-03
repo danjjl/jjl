@@ -49,4 +49,19 @@
 	<script src="/static/multifile/multifile.min.js"></script>
 	<script src="/static/redactor/fr.min.js"></script>
 	<script src="/static/redactor/fullscreen.min.js"></script>
+	<script src="/static/bootbox/bootbox.min.js"></script>
+	<script>
+		{% for piece in files %}
+			$(function(){$("button[value='{{ piece }}']").click(function(event){
+				var button = $(this);
+				event.preventDefault();
+				bootbox.confirm("Es-tu sûr de vouloir supprimer la pièce jointe {{ piece }}?", function(confirmed){
+					if(confirmed){
+						button.unbind('click');
+						button.click();
+					}
+				});
+			});});
+		{% endfor %}
+	</script>
 {% endblock %}
