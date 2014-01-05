@@ -41,4 +41,4 @@ class Peoula(models.Model):
         return self.nom
 
     class Meta:
-        ordering = ['age', 'telechargement', 'date_creation']
+        ordering = ['age', '-telechargement', '-date_creation']

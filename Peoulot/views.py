@@ -35,7 +35,7 @@ class ListPeoulot(ListView):
         #Péoulot de la semaine
         else:
             context['pageTitle'] = 'Péoulot de la semaine'
-            context['peoulot'] = context['peoulot'].filter(date_creation__gte=(date.today() - timedelta(10)))#max 10 jours
+            context['peoulot'] = context['peoulot'].filter(date_creation__gte=(date.today() - timedelta(10))).order_by('age', '-date_creation')
             context['trier'] = False
         return context
 
