@@ -145,18 +145,18 @@ def fileify(filename):
     return slugify(filename[0]) + filename[1]
 
 def handle_uploaded_file(upFile, pk):
-    with open(settings.MEDIA_ROOT[0] + '/Peoulot/' + str(pk) + '-' + fileify(upFile.name), 'wb+') as destination:
+    with open(settings.MEDIA_ROOT + '/Peoulot/' + str(pk) + '-' + fileify(upFile.name), 'wb+') as destination:
         for chunk in upFile.chunks():
             destination.write(chunk)
 
 def listePeoulotFiles(pk):
-    files = glob(settings.MEDIA_ROOT[0] + '/Peoulot/'+ str(pk) +'-*')
+    files = glob(settings.MEDIA_ROOT + '/Peoulot/'+ str(pk) +'-*')
     for i in range(0, len(files)):
-        files[i] = files[i][len(settings.MEDIA_ROOT[0] + '/Peoulot/'):]
+        files[i] = files[i][len(settings.MEDIA_ROOT + '/Peoulot/'):]
     return files
 
 def deleteFile(filename):
-    if path.isfile(settings.MEDIA_ROOT[0] + '/Peoulot/' + filename):
-        remove(settings.MEDIA_ROOT[0] + '/Peoulot/' + filename)
+    if path.isfile(settings.MEDIA_ROOT + '/Peoulot/' + filename):
+        remove(settings.MEDIA_ROOT + '/Peoulot/' + filename)
     else:
         raise Http404
