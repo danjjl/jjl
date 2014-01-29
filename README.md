@@ -7,6 +7,8 @@ Ce dépôt ne comprends ni le fichier `settings.py` ni une base de donnée, tous
 
 ###Django & python
 - **[python](http://python.org)** (2.7.3)
+- **[unidecode](https://pypi.python.org/pypi/Unidecode)** (0.04.14)
+- **[html2text](https://github.com/aaronsw/html2text)** (3.02)
 - **[django](https://djangoproject.com)** (1.6.0)
 - **[django-crispy-forms](https://github.com/maraujop/django-crispy-forms)** (1.4.0)
 - **[django-wysiwyg](https://github.com/pydanny/django-wysiwyg)** (0.51)
