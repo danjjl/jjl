@@ -1,0 +1,36 @@
+	<h1>Péoula - {{ peoula.nom }}</h1>
+
+	<ul>
+		<li><strong>Âge :</strong> {{ peoula.age }}-{{ peoula.age|add:"1" }} ans ({{ kvoutsa }})</li>
+		<li><strong>Durée :</strong> {{ peoula.duree }}</li>
+		<li><strong>Thème :</strong> {{ peoula.theme }}</li>
+		<li><strong>Type :</strong> {{ peoula.genre }}</li>
+		<li><strong>Objectifs éducatifs :</strong> {{ peoula.but }}</li>
+	</ul>
+
+	<h2>Introduction :</h2>
+	<div>{{ peoula.introduction|safe }}</div>
+
+	<h2>Déroulement :</h2>
+	<div>{{ peoula.deroulement|safe }}</div>
+
+	<h2>Conclusion :</h2>
+	<div>{{ peoula.conclusion|safe }}</div>
+
+	<h2>Matériel et kishout :</h2>
+	<div>{{ peoula.materiel|safe }}</div>
+
+	<hr>
+
+	<h2>Commentaires :</h2>
+	<div>{{ peoula.commentaires|safe }}</div>
+
+	<h2>Variantes :</h2>
+	<div>{{ peoula.variantes|safe }}</div>
+
+	<h2>Pièces Jointes :</h2>
+	<ul>
+	{% for piece in pieceJointe %}
+		<li><a href="{{ request.META.HTTP_HOST }}/{{ MEDIA_URL }}Peoulot/{{ piece }}">{{ piece }}</a></li>
+	{% endfor %}
+	</ul>

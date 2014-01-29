@@ -2,14 +2,19 @@
 from django.http import Http404
 from django.views.generic import ListView, DetailView
 from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, redirect, get_object_or_404
+from django.core.mail import EmailMultiAlternatives
 
 from datetime import date, timedelta
 from glob import glob
 from os import remove, path
+from unidecode import unidecode
+from html2text import html2text
 
 from JJL.Peoulot.models import Peoula
 from JJL.Kvoutsot.views import nomKvoutsa
@@ -107,6 +112,9 @@ def ajouterModifier(request, pk=0):
                     #Save file
                     for files in request.FILES.getlist('file-file'):
                         handle_uploaded_file(files, peoula.id)
+                    #Send mail
+                    if pk == 0:
+                        sendPeoulaMail(peoula, '', '')
                     return redirect('liste')
 
     #Display form
@@ -154,6 +162,16 @@ def listePeoulotFiles(pk):
     for i in range(0, len(files)):
         files[i] = files[i][len(settings.MEDIA_ROOT + '/Peoulot/'):]
     return files
+
+#Send péoula by email
+def sendPeoulaMail(peoula, subject, text):
+    email = User.objects.get(username__exact='madrih').email
+    title = unidecode(u'Péoula %s (%s-%s) %s' %(nomKvoutsa(peoula.age), peoula.age, peoula.age+1, peoula.nom))
+    message = render_to_string('Peoulot/mail.html', {'peoula':peoula, 'kvoutsa':nomKvoutsa(peoula.age), 'pieceJointe':listePeoulotFiles(peoula.pk)})
+    #TODO use sendMail when django 1.7 is released
+    email = EmailMultiAlternatives(subject + title, html2text(text + message), settings.DEFAULT_FROM_EMAIL, [email])
+    email.attach_alternative(text + message, "text/html")
+    email.send()
 
 def deleteFile(filename):
     if path.isfile(settings.MEDIA_ROOT + '/Peoulot/' + filename):
