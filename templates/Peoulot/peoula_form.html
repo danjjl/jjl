@@ -51,6 +51,7 @@
 	<script src="/static/redactor/fullscreen.min.js"></script>
 	<script src="/static/bootbox/bootbox.min.js"></script>
 	<script>
+		bootbox.setDefaults({locale: "fr"});
 		{% for piece in files %}
 			$(function(){$("button[value='{{ piece }}']").click(function(event){
 				var button = $(this);

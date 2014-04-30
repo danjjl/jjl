@@ -57,6 +57,7 @@
 	{% if perms.Peoulot.delete_peoula %}
 		<script src="/static/bootbox/bootbox.min.js"></script>
 		<script>
+			bootbox.setDefaults({locale: "fr"});
 			$(function(){$("button.supprimer").click(function(e){
 				var button = $(this);
 				e.preventDefault();
