@@ -54,17 +54,19 @@
 {% endblock %}
 
 {% block js %}
-	<script src="/static/bootbox/bootbox.min.js"></script>
-	<script>
-		$(function(){$("button.supprimer").click(function(e){
-			var button = $(this);
-			e.preventDefault();
-			bootbox.confirm("Es-tu sûr de vouloir supprimer la péoula {{ peoula.nom }}?", function(confirmed){
-				if(confirmed){
-					button.unbind('click');
-					button.click();
-				}
-			});
-		});});
-	</script>
+	{% if perms.Peoulot.delete_peoula %}
+		<script src="/static/bootbox/bootbox.min.js"></script>
+		<script>
+			$(function(){$("button.supprimer").click(function(e){
+				var button = $(this);
+				e.preventDefault();
+				bootbox.confirm("Es-tu sûr de vouloir supprimer la péoula {{ peoula.nom }}?", function(confirmed){
+					if(confirmed){
+						button.unbind('click');
+						button.click();
+					}
+				});
+			});});
+		</script>
+	{% endif %}
 {% endblock %}
