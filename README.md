@@ -14,8 +14,8 @@ Ce dépôt ne comprends ni le fichier `settings.py` ni une base de donnée, tous
 - **[django-wysiwyg](https://github.com/pydanny/django-wysiwyg)** (0.51)
 
 ### js & css
-- **[jquery](https://jquery.org)** (1.11.0)
-- **[HTML5 Shiv](https://code.google.com/p/html5shiv/)** (3.7.0)
+- **[jquery](https://jquery.org)** (1.11.1)
+- **[HTML5 Shiv](https://code.google.com/p/html5shiv/)** (3.7.2)
 - **[respond](https://github.com/scottjehl/Respond)** (1.4.2)
 - **[bootstrap](http://getbootstrap.com)** (js) (3.1.1)
 - **[bootswatch - flatly](http://bootswatch.com/flatly)** (3.1.1)
