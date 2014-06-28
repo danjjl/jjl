@@ -19,7 +19,7 @@ Ce dépôt ne comprends ni le fichier `settings.py` ni une base de donnée, tous
 - **[respond](https://github.com/scottjehl/Respond)** (1.4.2)
 - **[bootstrap](http://getbootstrap.com)** (js) (3.1.1)
 - **[bootswatch - flatly](http://bootswatch.com/flatly)** (3.1.1)
-- **[font-awesome](http://fontawesome.io)** (4.0.3)
+- **[font-awesome](http://fontawesome.io)** (4.1.0)
 - **[bootbox](http://bootboxjs.com)** (4.2.0)
 - **[multifile](http://www.fyneworks.com/jquery/multiple-file-upload)** (1.48)
 - **[redactor](http://imperavi.com/redactor)** (9.2.2)
