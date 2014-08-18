@@ -11,7 +11,7 @@ def nomKvoutsa(age):
         #kvoutsot born on 01/09/year
         if date.today().month < 8:
             age += 1 #kvoutsa is older in january-august
-        kvoutsa = Kvoutsa.objects.get(date_creation=date(date.today().year + 7 - age, 9, 1))
+        kvoutsa = Kvoutsa.objects.get(date_creation=date(date.today().year + 6 - age, 9, 1))
     except ObjectDoesNotExist:
         #should notify admin
         pass

@@ -3,7 +3,8 @@ from django.db import models
 
 class Peoula(models.Model):
     CHOIX_AGE = (
-        (7, '6-8'),
+        (6, '6-7'),
+        (7, '7-8'),
         (8, '8-9'),
         (9, '9-10'),
         (10, '10-11'),
