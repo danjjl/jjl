@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, redirect, get_object_or_404
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import send_mail
 
 from datetime import date, timedelta
 from glob import glob
@@ -168,10 +168,7 @@ def sendPeoulaMail(peoula, subject, text):
     email = User.objects.get(username__exact='madrih').email
     title = unidecode(u'Péoula %s (%s-%s) %s' %(nomKvoutsa(peoula.age), peoula.age, peoula.age+1, peoula.nom))
     message = render_to_string('Peoulot/mail.html', {'peoula':peoula, 'kvoutsa':nomKvoutsa(peoula.age), 'pieceJointe':listePeoulotFiles(peoula.pk)})
-    #TODO use sendMail when django 1.7 is released
-    email = EmailMultiAlternatives(subject + title, html2text(text + message), settings.DEFAULT_FROM_EMAIL, [email])
-    email.attach_alternative(text + message, "text/html")
-    email.send()
+    send_mail(subject + title, html2text(text + message), settings.DEFAULT_FROM_EMAIL, [email], html_message=message)
 
 def deleteFile(filename):
     if path.isfile(settings.MEDIA_ROOT + 'Peoulot/' + filename):
