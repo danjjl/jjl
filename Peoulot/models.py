@@ -13,6 +13,7 @@ class Peoula(models.Model):
         (13, '13-14'),
         (14, '14-15'),
         (15, '15-16'),
+	(99, 'JJL'),
     )
     nom = models.CharField(max_length=50)
     age = models.IntegerField(choices=CHOIX_AGE)

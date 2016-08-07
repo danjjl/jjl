@@ -25,7 +25,11 @@
 	{% for peoula in peoulot %}
 			<tr>
 				<td><a href="{% url 'lire' peoula.id %}">{{ peoula.nom }}</a></td>
+				{% if peoula.age != 99 %}
 				<td>{{ peoula.age }}-{{ peoula.age|add:"1" }}</td>
+				{% else %}
+				<td>JJL</td>
+				{% endif %}
 				<td>{{ peoula.theme }}</td>
 				<td>{{ peoula.genre }}</td>
 				<td>{{ peoula.telechargement }}</td>

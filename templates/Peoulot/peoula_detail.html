@@ -15,7 +15,11 @@
 			<div class="panel-heading"><h1 class="panel-title">{{ peoula.nom }} <small> - {{ peoula.date_creation }}</small></h1></div>
 			<div class="panel-body">
 				<ul>
+					{% if peoula.age != 99 %}
 					<li><strong>Âge :</strong> {{ peoula.age }}-{{ peoula.age|add:"1" }} ans ({{ kvoutsa }})</li>
+					{% else %}
+					<li><strong>Âge :</strong> JJL</li>
+					{% endif %}
 					<li><strong>Durée :</strong> {{ peoula.duree }}</li>
 					<li><strong>Thème :</strong> {{ peoula.theme }}</li>
 					<li><strong>Type :</strong> {{ peoula.genre }}</li>
