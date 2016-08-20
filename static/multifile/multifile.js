@@ -1,5 +1,5 @@
 /*
- ### jQuery Multiple File Selection Plugin v2.0.3 - 2014-05-27 ###
+ ### jQuery Multiple File Selection Plugin v2.2.1 - 2015-03-23 ###
  * Home: http://www.fyneworks.com/jquery/multifile/
  * Code: http://code.google.com/p/jquery-multifile-plugin/
  *
@@ -15,6 +15,14 @@ if (window.jQuery)(function ($) {
 	// size label function (shows kb and mb where accordingly)
 	function sl(x) {
 		return x > 1048576 ? (x / 1048576).toFixed(1) + 'Mb' : (x==1024?'1Mb': (x / 1024).toFixed(1) + 'Kb' )
+	};
+	// utility function to return an array of
+	function FILE_LIST(x){
+		return ((x.files&&x.files.length) ? x.files : null) || [{
+			name: x.value,
+			size: 0,
+			type: ((x.value || '').match(/[^\.]+$/i) || [''])[0]
+		}];
 	};
 
 	// plugin initialization
@@ -130,8 +138,10 @@ if (window.jQuery)(function ($) {
 
 				//===
 
-				// HTML5: enforce multiple selection to be enabled
-				if(o.max>1) MultiFile.E.attr('multiple','multiple').prop('multiple',true);
+				// HTML5: enforce multiple selection to be enabled, except when explicitly disabled
+				if (o.multiple !== false) {
+		                    if (o.max > 1) MultiFile.E.attr('multiple', 'multiple').prop('multiple', true);
+		                }
 
 				//===
 
@@ -154,14 +164,11 @@ if (window.jQuery)(function ($) {
 					trigger: function (event, element, MultiFile, files) {
 						var rv, handler = MultiFile[event] || MultiFile['on'+event] ;
 						if (handler){
-							files = files || MultiFile.files || (this.files?this.files[0]:null) || [{
-														name: this.value,
-														size: 0,
-														type: ((this.value || '').match(/[^\.]+$/i) || [''])[0]
-													}]
+							files = files || MultiFile.files || FILE_LIST(this);
 							;
 							$.each(files,function(i, file){
-								rv = handler(element, file.name, MultiFile, file);
+								// execute function in element's context, so 'this' variable is current element
+								rv = handler.apply(MultiFile.wrapper, [element, file.name, MultiFile, file]);
 							});
 							return rv;
 						};
@@ -180,7 +187,7 @@ if (window.jQuery)(function ($) {
 				//===
 
 				// Create wrapper to hold our file list
-				MultiFile.wrapID = MultiFile.instanceKey + '_wrap'; // Wrapper ID?
+				MultiFile.wrapID = MultiFile.instanceKey;// + '_wrap'; // Wrapper ID?
 				MultiFile.E.wrap('<div class="MultiFile-wrap" id="' + MultiFile.wrapID + '"></div>');
 				MultiFile.wrapper = $('#' + MultiFile.wrapID + '');
 
@@ -213,12 +220,13 @@ if (window.jQuery)(function ($) {
 
 					// BUG FIX: http://plugins.jquery.com/node/1495
 					// Clear identifying properties from clones
-					if (slave_count > 0) slave.id = slave.name = '';
+					slave.id = slave.name = '';
 
 					// Define element's ID and name (upload components need this!)
 					//slave.id = slave.id || MultiFile.generateID(slave_count);
-					if (slave_count > 0) slave.id = MultiFile.generateID(slave_count);
+					slave.id = MultiFile.generateID(slave_count);
 					//FIX for: http://code.google.com/p/jquery-multifile-plugin/issues/detail?id=23
+					//CHANGE v2.2.1 - change ID of all file elements, keep original ID in wrapper
 
 					// 2008-Apr-29: New customizable naming convention (see url below)
 					// http://groups.google.com/group/jquery-dev/browse_frm/thread/765c73e41b34f924#
@@ -241,8 +249,8 @@ if (window.jQuery)(function ($) {
 					};
 
 					// Remember most recent slave
-					MultiFile.current = MultiFile.slaves[slave_count] = slave;
-
+					MultiFile.current = slave;
+					
 					// We'll use jQuery from now on
 					slave = $(slave);
 
@@ -293,7 +301,7 @@ if (window.jQuery)(function ($) {
 						$.each(files, function (i, file) {
 
 							// pop local variables out of array/file object
-							var v = file.name,
+							var v = file.name.replace(/^C:\\fakepath\\/gi,''),
 									s = file.size,
 									p = function(z){
 										return z
@@ -310,15 +318,19 @@ if (window.jQuery)(function ($) {
 							};
 
 							// Disallow duplicates
-							for (var f in MultiFile.slaves) {
-								if (MultiFile.slaves[f] && MultiFile.slaves[f] != e) {
-									var x = (MultiFile.slaves[f].value || '').replace(/^C:\\fakepath\\/gi,'');
-									if ( v == x || v == x.substr(x.length - v.length)) {
-										ERROR[ERROR.length] = p(MultiFile.STRING.duplicate);
-										MultiFile.trigger('FileDuplicate', this, MultiFile, [file]);
+							$(MultiFile.wrapper).find('input[type=file]').not(e).each(function(){
+								// go through each file in each slave
+								$.each(FILE_LIST(this), function (i, file) {
+									if(file.name){
+										//console.log('MultiFile.debug> Duplicate?', file.name, v);
+										var x = (file.name || '').replace(/^C:\\fakepath\\/gi,'');
+										if ( v == x || v == x.substr(x.length - v.length)) {
+											ERROR[ERROR.length] = p(MultiFile.STRING.duplicate);
+											MultiFile.trigger('FileDuplicate', e, MultiFile, [file]);
+										};
 									};
-								};
-							};
+								});
+							});
 
 							// limit the max size of individual files selected
 							if (MultiFile.maxfile>0 && s>0 && s>MultiFile.maxfile) {
@@ -370,7 +382,7 @@ if (window.jQuery)(function ($) {
 							// Handle error
 							MultiFile.error(ERROR.join('\n\n'));
 
-							// 2007-06-24: BUG FIX - Thanks to Adrian Wróbel <adrian [dot] wrobel [at] gmail.com>
+							// 2007-06-24: BUG FIX - Thanks to Adrian WrÃ³bel <adrian [dot] wrobel [at] gmail.com>
 							// Ditch the trouble maker and add a fresh new element
 							MultiFile.n--;
 							MultiFile.addSlave(newEle[0], slave_count);
@@ -378,7 +390,8 @@ if (window.jQuery)(function ($) {
 							slave.remove();
 							return false;
 
-						} else {
+						}
+						else { // if no errors have been found
 
 							// remember total size
 							MultiFile.total_size = total_size;
@@ -419,8 +432,11 @@ if (window.jQuery)(function ($) {
 
 					}); // slave.change()
 
-					// Save control to element
-					$(slave).data('MultiFile', MultiFile);
+					// point to wrapper
+					$(slave).data('MultiFile-wrap', MultiFile.wrapper);
+
+					// store contorl's settings and file info in wrapper
+					$(MultiFile.wrapper).data('MultiFile',MultiFile);
 
 					// disable?
 					if(disable_slave) $(slave).attr('disabled','disabled').prop('disabled',true);
@@ -438,8 +454,42 @@ if (window.jQuery)(function ($) {
 					MultiFile.trigger('FileAppend', slave, MultiFile, files);
 					//# End Event!
 					
-					var names = [];
+					var names = $('<span/>');
 					$.each(files, function (i, file) {
+						var v = String(file.name || '' ).replace(/[&<>'"]/g, function(c) { return '&#'+c.charCodeAt()+';'; }),
+								S = MultiFile.STRING,
+								n = S.label || S.file || S.name,
+								t = S.title || S.tooltip || S.selected,
+								p = file.type.substr(0,6) == 'image/' ? '<img class="MultiFile-preview" style="'+ MultiFile.previewCss+'"/>' : '',
+								label =	$(
+										(
+											'<span class="MultiFile-label" title="' + t + '">'+
+												'<span class="MultiFile-title">'+ n +'</span>'+
+												(MultiFile.preview || $(slave).is('.with-preview') ? p : '' )+
+											'</span>'
+										)
+										.replace(/\$(file|name)/gi, (v.match(/[^\/\\]+$/gi)||[v])[0])
+										.replace(/\$(ext|extension|type)/gi, (v.match(/[^\.]+$/gi)||[''])[0])
+										.replace(/\$(size)/gi, sl(file.size || 0))
+										.replace(/\$(preview)/gi, p)
+										.replace(/\$(i)/gi, i)
+								);
+						
+						// now supports preview via locale string.
+						// just add an <img class='MultiFile-preview'/> anywhere within the "file" string
+						label.find('img.MultiFile-preview').each(function(){
+							var t = this;
+							var oFReader = new FileReader();
+							oFReader.readAsDataURL(file);
+							oFReader.onload = function (oFREvent) {
+								t.src = oFREvent.target.result;
+							};
+						});
+
+						// append file label to list
+						if(i>0) names.append(', ');
+						names.append(label);
+
 						var v = String(file.name || '' );
 						names[names.length] =
 							(
@@ -450,27 +500,37 @@ if (window.jQuery)(function ($) {
 							.replace(/\$(file|name)/gi, (v.match(/[^\/\\]+$/gi)||[v])[0])
 							.replace(/\$(ext|extension|type)/gi, (v.match(/[^\.]+$/gi)||[''])[0])
 							.replace(/\$(size)/gi, sl(file.size || 0))
+							.replace(/\$(i)/gi, i)
 						;
 					});
-					names = names.join(', ');
 
 					//$.each(files, function (i, file) {
 						// Create label elements
 						var
 							r = $('<div class="MultiFile-label"></div>'),
 							b = $('<a class="MultiFile-remove" href="#' + MultiFile.wrapID + '">' + MultiFile.STRING.remove + '</a>')
+								
+								// ********
+								// TODO:
+								// refactor this as a single event listener on the control's
+								// wrapper for better performance and cleaner code
+								// ********
 								.click(function () {
 
+									// get list of files being removed
+									var files_being_removed = FILE_LIST(slave);
+									
 									//# Trigger Event! onFileRemove
-									MultiFile.trigger('FileRemove', slave, MultiFile, files);
+									MultiFile.trigger('FileRemove', slave, MultiFile, files_being_removed);
 									//# End Event!
 
 									MultiFile.n--;
 									MultiFile.current.disabled = false;
 
-									// Remove element, remove label, point to current
-									MultiFile.slaves[slave_count] = null;
+									// remove the relevant <input type="file"/> element
 									$(slave).remove();
+
+									// remove the relevant label
 									$(this).parent().remove();
 
 									// Show most current element again (move into view) and clear selection
@@ -480,31 +540,39 @@ if (window.jQuery)(function ($) {
 									});
 									$(MultiFile.current).reset().val('').attr('value', '')[0].value = '';
 
+									// point to currently visible element (always true, not necessary)
+									//MultiFile.current = MultiFile.wrapper.find('[type=file]:visible');
+
 									// rebuild array with the files that are left.
-									var newfs = [];
-									for (var x in MultiFile.slaves) {
-										var f = MultiFile.slaves[x];
-										if(f!=null && f!=undefined){
-											var files = ((f.files&&f.files.length) ? f.files : null) || [{
-														name: this.value,
-														size: 0,
-														type: ((this.value || '').match(/[^\.]+$/i) || [''])[0]
-													}];
-											// make a normal array
-											$.each(files, function (i, file) {
-												if(file.name!=undefined)
-													newfs[newfs.length] = file;
-											});
-										};
-									};
-									MultiFile.files = newfs;
+									var files_remaining = [], remain_size = 0;
+									// go through each slave
+									$(MultiFile.wrapper).find('input[type=file]').each(function(){
+										// go through each file in each slave
+										$.each(FILE_LIST(this), function (i, file) {
+											if(file.name){
+												//console.log('MultiFile.debug> FileRemove> remaining file', file.size, file);
+												// fresh file array
+												files_remaining[files_remaining.length] = file;
+												// fresh size count
+												remain_size += file.size;
+											};
+										});
+									});
+
+									// update MultiFile object
+									MultiFile.files = files_remaining;
+									MultiFile.total_size = remain_size;
+									MultiFile.size_label = sl(remain_size);
+
+									// update current control's reference to MultiFile object
+									$(MultiFile.wrapper).data('MultiFile', MultiFile);
 
 									//# Trigger Event! afterFileRemove
-									MultiFile.trigger('afterFileRemove', slave, MultiFile, files);
+									MultiFile.trigger('afterFileRemove', slave, MultiFile, files_being_removed);
 									//# End Event!
 
 									//# Trigger Event! onFileChange
-									MultiFile.trigger('FileChange', slave, MultiFile, MultiFile.files);
+									MultiFile.trigger('FileChange', MultiFile.current, MultiFile, files_remaining);
 									//# End Event!
 
 									return false;
@@ -537,8 +605,10 @@ if (window.jQuery)(function ($) {
 				//MultiFile.I++; // using window.MultiFile
 				MultiFile.n++;
 
+				// deprecated: contorl's data now stored in wrapper because it is never removed.
+				// improved performance and lower memory comsumption
 				// Save control to element
-				MultiFile.E.data('MultiFile', MultiFile);
+				//MultiFile.E.data('MultiFile', MultiFile);
 
 
 				//#####################################################################
@@ -553,6 +623,41 @@ if (window.jQuery)(function ($) {
 	### Core functionality and API ###
 	*/
 	$.extend($.fn.MultiFile, {
+
+
+		/**
+		 * This method exposes the all the control's data
+		 *
+		 * Returns an object with various settings and properties of the selected files
+		 * for this particular instance of the control. stored in the control's wrapper
+		 *
+		 * @name data
+		 * @type Object
+		 * @cat Plugins/MultiFile
+		 * @author Diego A. (http://www.fyneworks.com/)
+		 *
+		 * @example $('#selector').MultiFile('data');
+		 */
+		data: function () {
+			
+			// analyse this element
+			var e = $(this), b = e.is('.MultiFile-wrap');
+			
+			// get control wrapper
+			var wp = b ? e : e.data('MultiFile-wrap');
+			if(!wp || !wp.length)
+				return !console.error('Could not find MultiFile control wrapper');
+			
+			// get control data from wrapper
+			var mf = wp.data('MultiFile');
+			if(!mf)
+				return !console.error('Could not find MultiFile data in wrapper');
+			
+			// return data
+			return mf || {};
+		},
+
+
 		/**
 		 * This method removes all selected files
 		 *
@@ -566,9 +671,8 @@ if (window.jQuery)(function ($) {
 		 * @example $.fn.MultiFile.reset();
 		 */
 		reset: function () {
-			var settings = $(this).data('MultiFile');
-			//if(settings) settings.wrapper.find('a.MultiFile-remove').click();
-			if (settings) settings.list.find('a.MultiFile-remove').click();
+			var mf = this.MultiFile('data');
+			if (mf) $(mf.list).find('a.MultiFile-remove').click();
 			return $(this);
 		},
 
@@ -586,7 +690,7 @@ if (window.jQuery)(function ($) {
 		 * @example $('#selector').MultiFile('files');
 		 */
 		files: function () {
-			var mf = this.data('MultiFile');
+			var mf = this.MultiFile('data');
 			if(!mf) return !console.log('MultiFile plugin not initialized');
 			return mf.files || [];
 		},
@@ -605,9 +709,9 @@ if (window.jQuery)(function ($) {
 		 * @example $('#selector').MultiFile('size');
 		 */
 		size: function () {
-			var mf = this.data('MultiFile');
+			var mf = this.MultiFile('data');
 			if(!mf) return !console.log('MultiFile plugin not initialized');
-			return mf.total_size || [];
+			return mf.total_size || 0;
 		},
 
 
@@ -624,9 +728,9 @@ if (window.jQuery)(function ($) {
 		 * @example $('#selector').MultiFile('size');
 		 */
 		count: function () {
-			var mf = this.data('MultiFile');
+			var mf = this.MultiFile('data');
 			if(!mf) return !console.log('MultiFile plugin not initialized');
-			return mf.files.length || [];
+			return mf.files ? mf.files.length || 0 : 0;
 		},
 
 
@@ -747,6 +851,10 @@ if (window.jQuery)(function ($) {
 		/*group count*/ // use $g
 		/*slave count*/ // use $i
 		/*other	 */ // use any combination of he above, eg.: $name_file$i
+
+		// previews
+		preview: false,
+		previewCss: 'max-height:100px; max-width:100px;',
 
 		// STRING: collection lets you show messages in different languages
 		STRING: {

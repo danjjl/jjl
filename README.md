@@ -21,5 +21,5 @@ Ce dépôt ne comprends ni le fichier `settings.py` ni une base de donnée, tous
 - **[bootswatch - flatly](http://bootswatch.com/flatly)** (3.2.0)
 - **[font-awesome](http://fontawesome.io)** (4.2.0)
 - **[bootbox](http://bootboxjs.com)** (4.4.0)
-- **[multifile](https://github.com/fyneworks/multifile)** (2.0.2)
+- **[multifile](https://github.com/fyneworks/multifile)** (6377fde)
 - **[redactor](http://imperavi.com/redactor)** (10.2.5)
